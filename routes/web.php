@@ -18,6 +18,27 @@ $router->get('/', function () use ($router) {
     return "Hello World";
 });
 
+/*Correspondiente a Autenticacion*/
+
+/*Correspondiente a Usuario*/
+
+$router->get('/usuario/',function () use ($router){
+    return "Llamada al controlador";
+});
+
+$router->post('/usuario/',function () use ($router){
+    return "Llamada al controlador para insertar";
+});
+
+
+
+
+
+
+
+
+
+
 
 
 ?>
