@@ -23,11 +23,11 @@ $router->get('/', function () use ($router) {
 /*Correspondiente a Usuario*/
 
 $router->get('/usuario/',function () use ($router){
-    return "Llamada al controlador";
+    return "Llamada al controlador test";
 });
 
 $router->post('/usuario/',function () use ($router){
-    return "Llamada al controlador para insertar";
+    return "Llamada al controlador para insertar test ";
 });
 
 
