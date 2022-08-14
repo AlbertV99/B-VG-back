@@ -36,14 +36,14 @@ class UsuarioControlador extends Controller
             'email'=>'required|string',
             'perfil_id'=>'required|string',
         ]);
-        // try {
+        try {
+            $campos['restablecer_pass'] = 0;
             $campos['nombre_usuario'] = $this->validarUsuarioUnico($campos['nombre'],$campos['apellido'],$campos['cedula']."");
-            $campos['restablecer_pass']=0;
             $usuario = UsuarioModelo::create($campos);
 
-        // } catch (\Exception $e) {
-            // return ["cod"=>"05","msg"=>"Error al insertar los datos"];
-        // }
+        } catch (\Exception $e) {
+            return ["cod"=>"05","msg"=>"Error al insertar los datos"];
+        }
 
         return ["cod"=>"00","msg"=>"todo correcto"];
     }
@@ -55,8 +55,9 @@ class UsuarioControlador extends Controller
      * @return \Illuminate\Http\Response
      */
     public function listarPanel($busqueda="",$filtros=[]){
-        $temp = UsuarioModelo::select("usuario.nombre","usuario.apellido");
-        return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>"0","cantidad_paginas"=>"0","datos"=>$temp];
+        $temp = UsuarioModelo::select("usuario.nombre_usuario","usuario.nombre","usuario.apellido","usuario.cedula","usuario.fecha_nacimiento","usuario.email");
+
+        return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>"0","cantidad_paginas"=>"0","datos"=>$temp->get()];
     }
 
     /**
@@ -88,7 +89,7 @@ class UsuarioControlador extends Controller
         $validar = 1;
         while($validar >0){
             $nombre_usuario= substr($nombre,0,1).$apellido.substr($cedula,(strlen($cedula)-$cant_cedula));
-            $validar = UsuarioModelo::where("nombre_usuario","")->count();
+            $validar = UsuarioModelo::where("nombre_usuario",$nombre_usuario)->count();
             $cant_cedula++;
         }
         return $nombre_usuario;
