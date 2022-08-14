@@ -24,9 +24,10 @@ $router->get('/', function () use ($router) {
 
 $router->get('/usuario',['uses'=>'UsuarioControlador@listarPanel']);
 
-$router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
+$router->get('/usuario/lista',['uses'=>'UsuarioControlador@listar']);
 
-$router->put('/usuario',['uses'=>'UsuarioControlador@nuevo']);
+$router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
+$router->put('/usuario',['uses'=>'UsuarioControlador@modificar']);
 
 
 

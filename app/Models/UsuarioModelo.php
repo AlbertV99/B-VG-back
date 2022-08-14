@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class UsuarioModelo extends Model{
 
     public $table = 'usuario';
-
+    
     protected $fillable =[
+        'nombre_usuario',
         'nombre',
         'apellido',
+        'pass',
         'cedula',
         'fecha_nacimiento',
         'email',

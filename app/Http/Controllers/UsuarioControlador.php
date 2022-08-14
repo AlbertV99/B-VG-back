@@ -23,7 +23,28 @@ class UsuarioControlador extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function nuevo(Request $request){
+    public function nuevo(Request $peticion){
+        $username = substr($peticion->input('nombre'),0,1).$peticion->input('apellido');
+        // return ["nombre_usuario"=>$username];
+
+        $campos = $this->validate($peticion,[
+            'nombre'=>'required|string',
+            'apellido'=>'required|string',
+            'cedula'=>'required|string',
+            'pass'=>'required|string|confirmed',
+            'fecha_nacimiento'=>'required|string',
+            'email'=>'required|string',
+            'perfil_id'=>'required|string',
+        ]);
+        // try {
+            $campos['nombre_usuario'] = $this->validarUsuarioUnico($campos['nombre'],$campos['apellido'],$campos['cedula']."");
+            $campos['restablecer_pass']=0;
+            $usuario = UsuarioModelo::create($campos);
+
+        // } catch (\Exception $e) {
+            // return ["cod"=>"05","msg"=>"Error al insertar los datos"];
+        // }
+
         return ["cod"=>"00","msg"=>"todo correcto"];
     }
 
@@ -59,5 +80,18 @@ class UsuarioControlador extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    private function validarUsuarioUnico($nombre,$apellido,$cedula){
+        $cant_cedula = 3;
+        $validar = 1;
+        while($validar >0){
+            $nombre_usuario= substr($nombre,0,1).$apellido.substr($cedula,(strlen($cedula)-$cant_cedula));
+            $validar = UsuarioModelo::where("nombre_usuario","")->count();
+            $cant_cedula++;
+        }
+        return $nombre_usuario;
+
     }
 }
