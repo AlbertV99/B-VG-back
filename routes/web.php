@@ -22,12 +22,12 @@ $router->get('/', function () use ($router) {
 
 /*Correspondiente a Usuario*/
 
-$router->get('/usuario',['uses'=>'UsuarioControlador@listarPanel']);
+$router->get('/usuario/{pag}[/{busqueda}]',['uses'=>'UsuarioControlador@listarPanel']);
 
-$router->get('/usuario/lista',['uses'=>'UsuarioControlador@listar']);
+// $router->get('/usuario/lista',['uses'=>'UsuarioControlador@listar']);
 
 $router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
-$router->put('/usuario',['uses'=>'UsuarioControlador@modificar']);
+$router->post('/usuario/{id}',['uses'=>'UsuarioControlador@modificar']);
 
 
 

@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator;
 use App\Models\UsuarioModelo;
 
 class UsuarioControlador extends Controller
 {
+    private $c_reg_panel = 25;
+    private $c_reg_lista = 10;
+
+
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(){
+
     }
 
     /**
@@ -25,26 +30,28 @@ class UsuarioControlador extends Controller
      */
     public function nuevo(Request $peticion){
         $username = substr($peticion->input('nombre'),0,1).$peticion->input('apellido');
-        // return ["nombre_usuario"=>$username];
 
-        $campos = $this->validate($peticion,[
-            'nombre'=>'required|string',
-            'apellido'=>'required|string',
-            'cedula'=>'required|string',
-            'pass'=>'required|string|confirmed',
-            'fecha_nacimiento'=>'required|string',
-            'email'=>'required|string',
-            'perfil_id'=>'required|string',
-        ]);
         try {
+            $campos = $this->validate($peticion,[
+                'nombre'=>'required|string',
+                'apellido'=>'required|string',
+                'cedula'=>'required|string',
+                'pass'=>'required|string|confirmed',
+                'fecha_nacimiento'=>'required|string',
+                'email'=>'required|string',
+                'perfil_id'=>'required|string',
+            ]);
+
             $campos['restablecer_pass'] = 0;
             $campos['nombre_usuario'] = $this->validarUsuarioUnico($campos['nombre'],$campos['apellido'],$campos['cedula']."");
             $usuario = UsuarioModelo::create($campos);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return ["cod"=>"06","msg"=>"Error al insertar los datos","errores"=>[$e->errors() ]];
+
         } catch (\Exception $e) {
             return ["cod"=>"05","msg"=>"Error al insertar los datos"];
         }
-
         return ["cod"=>"00","msg"=>"todo correcto"];
     }
 
@@ -54,10 +61,17 @@ class UsuarioControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function listarPanel($busqueda="",$filtros=[]){
-        $temp = UsuarioModelo::select("usuario.nombre_usuario","usuario.nombre","usuario.apellido","usuario.cedula","usuario.fecha_nacimiento","usuario.email");
+    public function listarPanel($busqueda="",$pag=0){
+        $c_paginas = ceil(UsuarioModelo::count()/$this->c_reg_panel);
+        $salto = $pag*$this->c_reg_panel;
 
-        return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>"0","cantidad_paginas"=>"0","datos"=>$temp->get()];
+        $query = UsuarioModelo::select("usuario.nombre_usuario","usuario.nombre","usuario.apellido","usuario.cedula","usuario.fecha_nacimiento","usuario.email");
+        if($busqueda !=""){
+            $query = $query->where("usuario.nombre_usuario","like",$busqueda)->orWhere("usuario.nombre","like",$busqueda)->orWhere("usuario.apellido","like",$busqueda)->orWhere("usuario.apellido","like",$busqueda);
+        }
+        $query = $query->skip($salto)->take($this->c_reg_panel)->orderBy("usuario.nombre_usuario");
+
+        return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>$pag,"cantidad_paginas"=>$c_paginas,"datos"=>$query->get()];
     }
 
     /**
@@ -67,9 +81,30 @@ class UsuarioControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function modificar(Request $peticion, $id){
+
+        try {
+            // return [$request->all(),$id];
+            $campos = $this->validate($peticion,[
+                'nombre'=>'required|string',
+                'apellido'=>'required|string',
+                'cedula'=>'required|string',
+                'fecha_nacimiento'=>'required|string',
+                'email'=>'required|string',
+                'perfil_id'=>'required|string',
+            ]);
+
+            $usuario = UsuarioModelo::where("nombre_usuario",$id);
+
+            $usuario->update($campos);
+            return ["cod"=>"00","msg"=>"todo correcto"];
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return ["cod"=>"06","msg"=>"Error validando los datos","errores"=>[$e->errors() ]];
+
+        } catch (\Exception $e) {
+            return ["cod"=>"07","msg"=>"Error al actualizar los datos"];
+        }
     }
 
     /**
@@ -78,8 +113,7 @@ class UsuarioControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id){
         //
     }
 
