@@ -37,11 +37,12 @@ class ParametroControlador extends Controller
      */
     public function modificar(Request $peticion)
     {
+        
         $campos = $this->validate($peticion,[
-            'direccion_mail_saliente'=>'required|string',
+            //'direccion_mail_saliente'=>'required|string',
             'servidor_mail'=>'required|string',
             'puerto_mail'=>'required|string',
-            'pass_mail'=>'required|string|confirmed',
+            'pass_mail'=>'required|string',
             'interes_bcp'=>'required|string',
             'interes_moratorio'=>'required|string',
             'interes_punitorio'=>'required|string',

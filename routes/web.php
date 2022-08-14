@@ -32,7 +32,7 @@ $router->put('/usuario',['uses'=>'UsuarioControlador@modificar']);
 /*Correspondiente a Parametros*/
 
 $router->get('/parametro',['uses'=>'ParametroControlador@listarUnico']);
-$router->put('/parametro',['uses'=>'ParametroControlador@modificar']);
+$router->post('/parametro',['uses'=>'ParametroControlador@modificar']);
 
 
 
