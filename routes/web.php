@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controller;
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -22,13 +22,11 @@ $router->get('/', function () use ($router) {
 
 /*Correspondiente a Usuario*/
 
-$router->get('/usuario/',function () use ($router){
-    return "Llamada al controlador test";
-});
+$router->get('/usuario',['uses'=>'UsuarioControlador@listarPanel']);
 
-$router->post('/usuario/',function () use ($router){
-    return "Llamada al controlador para insertar test ";
-});
+$router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
+
+$router->put('/usuario',['uses'=>'UsuarioControlador@nuevo']);
 
 
 
