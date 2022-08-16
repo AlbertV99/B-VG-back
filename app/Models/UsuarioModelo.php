@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UsuarioModelo extends Model{
 
     public $table = 'usuario';
-    
+
     protected $fillable =[
         'nombre_usuario',
         'nombre',
@@ -16,7 +16,8 @@ class UsuarioModelo extends Model{
         'cedula',
         'fecha_nacimiento',
         'email',
-        'perfil_id'
+        'perfil_id',
+        'restablecer_pass'
     ];
 
     protected $hidden = [
