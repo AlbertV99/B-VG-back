@@ -29,7 +29,10 @@ $router->get('/usuario/{pag}[/{busqueda}]',['uses'=>'UsuarioControlador@listarPa
 $router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
 $router->post('/usuario/{id}',['uses'=>'UsuarioControlador@modificar']);
 
+/*Correspondiente a Parametros*/
 
+$router->get('/parametro',['uses'=>'ParametroControlador@listarUnico']);
+$router->post('/parametro',['uses'=>'ParametroControlador@modificar']);
 
 
 
