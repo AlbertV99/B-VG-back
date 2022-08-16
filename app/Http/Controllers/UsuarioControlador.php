@@ -36,14 +36,14 @@ class UsuarioControlador extends Controller
             'email'=>'required|string',
             'perfil_id'=>'required|string',
         ]);
-        // try {
+         try {
             $campos['nombre_usuario'] = $this->validarUsuarioUnico($campos['nombre'],$campos['apellido'],$campos['cedula']."");
             $campos['restablecer_pass']=0;
             $usuario = UsuarioModelo::create($campos);
 
-        // } catch (\Exception $e) {
-            // return ["cod"=>"05","msg"=>"Error al insertar los datos"];
-        // }
+        } catch (\Exception $e) {
+            return ["cod"=>"05","msg"=>"Error al insertar los datos"];
+         }
 
         return ["cod"=>"00","msg"=>"todo correcto"];
     }
