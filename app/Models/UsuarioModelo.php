@@ -17,7 +17,8 @@ class UsuarioModelo extends Model{
         'fecha_nacimiento',
         'email',
         'perfil_id',
-        'restablecer_pass'
+        'restablecer_pass',
+        'activo'
     ];
 
     protected $hidden = [
