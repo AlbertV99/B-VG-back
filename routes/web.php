@@ -30,7 +30,10 @@ $router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
 $router->post('/usuario/{id}',['uses'=>'UsuarioControlador@modificar']);
 $router->delete('/usuario/{id}',['uses'=>'UsuarioControlador@eliminar']);
 
+/*Correspondiente a Parametros*/
 
+$router->get('/parametro',['uses'=>'ParametroControlador@listarUnico']);
+$router->post('/parametro',['uses'=>'ParametroControlador@modificar']);
 
 
 

@@ -43,9 +43,9 @@ class UsuarioControlador extends Controller
             ]);
 
             $campos['restablecer_pass'] = 0;
+
             $campos['nombre_usuario'] = $this->validarUsuarioUnico($campos['nombre'],$campos['apellido'],$campos['cedula']."");
             $usuario = UsuarioModelo::create($campos);
-
         } catch (\Illuminate\Validation\ValidationException $e) {
             return ["cod"=>"06","msg"=>"Error al insertar los datos","errores"=>[$e->errors() ]];
 
