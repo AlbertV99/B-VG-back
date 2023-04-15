@@ -73,6 +73,18 @@ class UsuarioControlador extends Controller
 
         return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>$pag,"cantidad_paginas"=>$c_paginas,"datos"=>$query->get()];
     }
+    public function listarDesplegable($busqueda){
+        $c_paginas = ceil(UsuarioModelo::count()/$this->c_reg_panel);
+        $salto = $pag*$this->c_reg_panel;
+
+        $query = UsuarioModelo::select("usuario.nombre_usuario","usuario.nombre","usuario.apellido","usuario.cedula");
+        if($busqueda !=""){
+            $query = $query->where("usuario.nombre_usuario","like",$busqueda)->orWhere("usuario.nombre","like",$busqueda)->orWhere("usuario.apellido","like",$busqueda)->orWhere("usuario.apellido","like",$busqueda);
+        }
+        $query = $query->skip(0)->take($this->c_reg_lista)->orderBy("usuario.nombre_usuario");
+
+        return ["cod"=>"00","msg"=>"todo correcto","pagina_actual"=>$pag,"cantidad_paginas"=>$c_paginas,"datos"=>$query->get()];
+    }
 
     /**
      * Update the specified resource in storage.
@@ -113,8 +125,18 @@ class UsuarioControlador extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
-        //
+    public function eliminar($id){
+        $eliminar = ["activo"=>"0"];
+        try {
+
+            $usuario = UsuarioModelo::where("nombre_usuario",$id);
+
+            $usuario->update($eliminar);
+
+            return ["cod"=>"00","msg"=>"todo correcto"];
+        } catch (\Exception $e) {
+            return ["cod"=>"08","msg"=>"Error al eliminar el registro"];
+        }
     }
 
 
@@ -122,7 +144,7 @@ class UsuarioControlador extends Controller
         $cant_cedula = 3;
         $validar = 1;
         while($validar >0){
-            $nombre_usuario= substr($nombre,0,1).$apellido.substr($cedula,(strlen($cedula)-$cant_cedula));
+            $nombre_usuario= strtolower(substr($nombre,0,1).$apellido.substr($cedula,(strlen($cedula)-$cant_cedula)));
             $validar = UsuarioModelo::where("nombre_usuario",$nombre_usuario)->count();
             $cant_cedula++;
         }

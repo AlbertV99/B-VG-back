@@ -28,6 +28,7 @@ $router->get('/usuario/{pag}[/{busqueda}]',['uses'=>'UsuarioControlador@listarPa
 
 $router->post('/usuario',['uses'=>'UsuarioControlador@nuevo']);
 $router->post('/usuario/{id}',['uses'=>'UsuarioControlador@modificar']);
+$router->delete('/usuario/{id}',['uses'=>'UsuarioControlador@eliminar']);
 
 /*Correspondiente a Parametros*/
 
